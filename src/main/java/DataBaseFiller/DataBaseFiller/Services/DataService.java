@@ -11,12 +11,19 @@ public class DataService {
     @Autowired
     private DataRepository dataRepository;
 
+
     public String registerMail(Mail mail){
-        return dataRepository.registerMail(mail);
+        RabbitMQService rabbitMQService = new RabbitMQService("Mail");
+        rabbitMQService.sendObjectToQueue(mail);
+        return "Mail was successfully added";
+        //return dataRepository.registerMail(mail);
     }
 
     public String saveImage(byte[] imageInBytes) {
-        return dataRepository.saveImage(imageInBytes);
+        RabbitMQService rabbitMQService = new RabbitMQService("Image");
+        rabbitMQService.sendObjectToQueue(imageInBytes);
+        return "Image was successfully added";
+      //  return dataRepository.saveImage(imageInBytes);
     }
 
 }
